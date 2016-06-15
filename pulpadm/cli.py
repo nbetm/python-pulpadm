@@ -3,6 +3,7 @@ import argparse
 import logging
 import logging.config
 import pkg_resources
+import pulpadm.repo as repo
 import pulpadm.utils as utils
 from pulpadm.constants import PKG_NAME, CONFIG_FILE, LOG_LEVEL
 
@@ -68,6 +69,46 @@ def main():
         dest="action"
     )
 
+    # Repo action parser: create
+    repo_create_parser = repo_subparsers.add_parser(
+        "create", formatter_class=argparse.ArgumentDefaultsHelpFormatter,
+        help="creates RPM repositories from input file on the Pulp server",
+        description="Creates RPM repositories from input file on the Pulp server",
+        parents=[parent_parser]
+    )
+    repo_create_parser.add_argument(
+        "path", type=str,
+        help="""specifies the path of the input file in YAML format with the
+             repositories and configuraiton data to be created"""
+    )
+    repo_create_parser.add_argument(
+        "--repo-id", type=str, dest="repo_id",
+        help="""if specified, RPM repo is created for one repository"""
+    )
+    repo_create_parser.set_defaults(func=repo.create)
+
+    # Repo action parser: generate
+    repo_generate_parser = repo_subparsers.add_parser(
+        "generate", formatter_class=argparse.ArgumentDefaultsHelpFormatter,
+        help="""generates JSON object from input file. The 'create' action uses
+             the same internal process to generate the data for the RESTful API
+             on the Pulp server""",
+        description="""generates JSON object from input file. The 'create'
+                    action uses the same internal process to generate the data
+                    for the RESTful API on the Pulp server""",
+        parents=[parent_parser]
+    )
+    repo_generate_parser.add_argument(
+        "path", type=str,
+        help="""specifies the path of the input file in YAML format with the
+             repositories and configuraiton data to be created"""
+    )
+    repo_generate_parser.add_argument(
+        "--repo-id", type=str, dest="repo_id",
+        help="""if specified, JSON object is generated for one repository"""
+    )
+    repo_generate_parser.set_defaults(func=repo.create)
+
     # Repo action parser: list
     repo_list_parser = repo_subparsers.add_parser(
         "list", formatter_class=argparse.ArgumentDefaultsHelpFormatter,
@@ -75,17 +116,23 @@ def main():
         description="Lists RPM repositories on the Pulp server",
         parents=[parent_parser]
     )
+    repo_list_parser.add_argument(
+        "--repo-id", type=str, dest="repo_id",
+        help="""if specified, configuration information is displayed for one
+             repository"""
+    )
     repo_list_parser_group = repo_list_parser.add_mutually_exclusive_group()
     repo_list_parser_group.add_argument(
         "--details", action="store_true",
         help="""if specified, detailed configuration information is displayed in
              JSON format for each repository"""
     )
-    repo_list_parser.add_argument(
-        "--repo-id", type=str, dest="repo_id",
-        help="""if specified, configuration information is displayed for one
-             repository"""
+    repo_list_parser_group.add_argument(
+        "--summary", action="store_true",
+        help="""if specified, a condensed view for each repository will be
+             displayed instead"""
     )
+    repo_list_parser.set_defaults(func=repo.list)
 
     # Parse arguments
     args = parser.parse_args()
@@ -119,9 +166,10 @@ def main():
     args.hostname = args.hostname if args.hostname else c.get("hostname", None)
     args.port = args.port if args.port else c.get("port", None)
     args.username = args.username if args.username else c.get("username", None)
+    args.password = args.password if args.password else c.get("password", None)
 
     # Call sub-command functions
-    #  args.func(args)
+    args.func(args)
 
 
 if __name__ == "__main__":

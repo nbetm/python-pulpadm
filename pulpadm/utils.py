@@ -14,8 +14,6 @@ def read_yaml(path=None):
     """
     logger = logging.getLogger(__name__ + '.read_yaml')
 
-    logger.debug("Loading and parsing yaml file: '{0}'".format(path))
-
     data = None
     try:
         if path:
@@ -25,6 +23,27 @@ def read_yaml(path=None):
     except IOError as e:
         logger.error(e)
     except yaml.YAMLError as e:
+        logger.error(e)
+    finally:
+        return data
+
+
+def read_file(path=None):
+    """
+    Reads a given plain-text file and returns data as string
+
+    :type path: str
+    :param path: The absolute path of the file
+    """
+    logger = logging.getLogger(__name__ + '.read_file')
+
+    data = None
+    try:
+        if path:
+            with open(os.path.expanduser(path), 'r') as stream:
+                data = stream.read()
+            stream.closed
+    except IOError as e:
         logger.error(e)
     finally:
         return data
