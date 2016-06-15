@@ -1,4 +1,5 @@
 from __future__ import print_function, unicode_literals
+import sys
 import json
 import logging
 import requests
@@ -109,7 +110,7 @@ def list(args):
     """
     CLI wrapper function for aciton: list
     """
-    #  logger = logging.getLogger(__name__ + '.list')
+    logger = logging.getLogger(__name__ + '.list')
 
     # API request
     url = "https://{0}:{1}{2}".format(args.hostname, args.port, API_PATH["repositories"])
@@ -122,6 +123,12 @@ def list(args):
         params={"details": args.details},
         verify=False,
     )
+
+    # Exit if repo_id does not exist
+    if r.status_code == 404:
+        logger.error(r.json()["error"].get("description", "Unknown"))
+        sys.exit(1)
+
     data_api = [r.json()] if args.repo_id else r.json()
 
     # details | summary | simple
