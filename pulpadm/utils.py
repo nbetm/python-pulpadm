@@ -3,8 +3,6 @@ from builtins import open
 import os
 import logging
 import yaml
-from shutil import copyfile
-from pulpadm.constants import BASE_DIR, TMPL_DIR
 
 
 def read_yaml(path=None):
@@ -49,22 +47,3 @@ def read_file(path=None):
         logger.error(e)
     finally:
         return data
-
-
-def initial_setup():
-    """
-    Setup BASE_DIR and example files
-    """
-    print()
-    if not os.path.exists(BASE_DIR):
-        print("Creating {0}".format(BASE_DIR))
-        os.mkdir(BASE_DIR)
-
-    for fname in ["config.yaml", "repos.yaml"]:
-        src = os.path.join(TMPL_DIR, fname)
-        dst = os.path.join(BASE_DIR, fname)
-        if os.path.exists(dst):
-            dst += ".new"
-        print("Copying {0} -> {1}".format(os.path.basename(src), dst))
-        copyfile(src, dst)
-    print()
