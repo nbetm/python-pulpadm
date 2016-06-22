@@ -37,6 +37,7 @@ python setup.py install
 
 By default, PulpAdm stage its configuration file under `~/.pulpadm/` directory.
 Here is where you configure the *hostname* and *credentials* of the Pulp Server.
+A template of the configuration file can be found [here][config-tmpl].
 
 ## Usage
 
@@ -47,7 +48,8 @@ A simple example could be when you deploy a new Pulp Infrastructure and a set of
 repositories need to be created. In oder to do so, you just need to have a YAML
 file with a list of repositories and their configuration data (Feed, Relative
 URL, Enable HTTP... and so on); then use the `create` action (under the `repo`
-section) and feed this file.
+section) and feed this file. A template of this data file can be found
+[here][repos-tmpl].
 
 ## Limitations
 
@@ -64,3 +66,5 @@ API.
  - Bind repositories to child nodes
 
   [pulp-home]: <http://www.pulpproject.org/>
+  [config-tmpl]: <pulpadm/templates/config.yaml>
+  [repos-tmpl]: <pulpadm/templates/repos.yaml>

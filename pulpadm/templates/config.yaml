@@ -1,0 +1,7 @@
+#
+# pulp_server:
+#   hostname: str       - Pulp server hostname
+#   port: int           - Pulp server RESTful HTTP port
+#   username: str       - Pulp server account username
+#   password: str       - Pulp server account password
+#

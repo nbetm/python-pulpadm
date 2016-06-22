@@ -5,7 +5,7 @@ import logging.config
 import pkg_resources
 import pulpadm.repo as repo
 import pulpadm.utils as utils
-from pulpadm.constants import PKG_NAME, CONFIG_FILE, LOG_LEVEL
+from pulpadm.constants import PKG_NAME, PKG_DESC, CONFIG_FILE, LOG_LEVEL
 
 
 def main():
@@ -14,8 +14,6 @@ def main():
     # Parent parser
     parent_parser = argparse.ArgumentParser(add_help=False)
 
-    parent_parser.add_argument("-V", "--version", action="version",
-                               version="{0} v{1}".format(PKG_NAME, version))
     parent_parser.add_argument("--config", type=str, dest="config_file",
                                default=CONFIG_FILE,
                                help="""specifies alternative path of the config
@@ -44,9 +42,11 @@ def main():
     # Top-level parser
     parser = argparse.ArgumentParser(
         prog=PKG_NAME,
-        description="Pulp admin tool to manage RPM repositories and more",
+        description=PKG_DESC,
         formatter_class=argparse.ArgumentDefaultsHelpFormatter
     )
+    parser.add_argument("-V", "--version", action="version",
+                        version="{0} v{1}".format(PKG_NAME, version))
 
     # Section subparsers
     #

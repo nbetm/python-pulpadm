@@ -1,37 +1,64 @@
 import os
 import sys
 from setuptools import setup, find_packages
+from setuptools.command.develop import develop
+from setuptools.command.install import install
+from pulpadm.utils import initial_setup, read_file as read
+from pulpadm.constants import PKG_NAME, PKG_DESC
 
 
-# Utility function to read the README file.
-# Used for the long_description.  It's nice, because now 1) we have a top level
-# README file and 2) it's easier to type in the README file than to put a raw
-# string in below ...
-def read(fname):
-    return open(os.path.join(os.path.dirname(__file__), fname)).read()
-
+# Global variables
+#
 version = "0.1.0"
 requires = [
     "future",
     "requests",
-    "PyYAML",
-    "tabulate"
+    "PyYAML"
 ]
 
-# For python v2.6 we have to require argparse because is not part of stdlib
+# Python v2.6 does not include argparse on the stdlib
 if sys.version_info[:2] == (2, 6):
     requires.append("argparse>=1.1")
 
+
+class PostDevelopCommand(develop):
+    """
+    Post-installation for development mode
+    """
+    def run(self):
+        initial_setup()
+        develop.run(self)
+
+
+class PostInstallCommand(install):
+    """
+    Post-installation for install mode
+    """
+    def run(self):
+        initial_setup()
+        install.run(self)
+
+
 setup(
-    name="pulpadm",
+    name=PKG_NAME,
+    description=PKG_DESC,
+    long_description=read(os.path.join(os.path.dirname(__file__), "README")),
     version=version,
-    description="Pulp Admin Tool",
+    author="Nelson R Monserrate",
+    author_email="nrmonserrate@gmail.com",
+    url="https://github.com/nbetm/python-pulpadm",
     packages=find_packages(),
     entry_points={
         "console_scripts": ["pulpadm = pulpadm.cli:main"]
     },
-    install_requires=requires,
+    cmdclass={
+        "develop": PostDevelopCommand,
+        "install": PostInstallCommand
+    },
     include_package_data=True,
+    package_data={
+        "": ["templates/*"]
+    },
+    install_requires=requires,
     zip_safe=False,
-    long_description=read("README"),
 )

@@ -1,1 +1,15 @@
-There is yet nothing here!
+PulpAdm is a CLI tool that helps you manage your RPM repositories in a Pulp
+Server (usually the master). It was initially developed with the idea of filling
+the void of doing repetitive tasks around RPM repositories in the commonly known
+`pulp-admin` that comes with Pulp.
+
+Pulp is a platform for managing repositories of content, such as software
+packages, and pushing that content out to large numbers of consumers. For more
+information, check out the project: http://www.pulpproject.org/
+
+*Notice: this application does not implement (I'm not trying to reinvent the
+wheel here) a full admin interface for Pulp. If you are looking for a full admin
+client interface, use `pulp-admin` instead.*
+
+PulpAdm comes with a CLI Interface called: `pulpadm`. Use the `-h` flag to learn
+more about it and what it can do.

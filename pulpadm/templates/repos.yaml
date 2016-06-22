@@ -1,0 +1,36 @@
+#
+# repo_id:
+#   display_name: str   - User-readable display name (i18n characters)
+#   feed: str           - URL of the external source repository to sync
+#   max_speed: int      - Maximum bandwidth used per download thread (bytes/sec),
+#                         when synchronizing the repo. If feed URL is provided,
+#                         default is: 10485760 bytes/sec
+#   relative_url: str   - Relative path the repository will be served from. Only
+#                         alphanumeric characters, forward slashes, underscores
+#                         and dashes are allowed. It defaults to the relative
+#                         path of the feed URL. You MUST ignore the first
+#                         forward slash. ie: "epel/6Server/x86_64/"
+#   serve_http: bol     - If "true", the repository will be served over HTTP;
+#                         defaults to: true
+#   serve_https: bol    - If "true", the repository will be served over HTTPS;
+#                         defaults to: true
+#   feed_ca_cert: str   - Full path to the CA certificate that should be used to
+#                         verify the external repo server's SSL certificate. ie:
+#                         "~/.pulpam/ca/redhat-uep.pem"
+#   feed_cert: str      - Full path to the certificate to use for authorization
+#                         when accessing the external feed. ie:
+#                         "~/.pulpadm/sub/8a85f98152114bd6015212999fe76a87.pem"
+#   feed_key: str       - Full path to the private key for feed_cert. ie:
+#                         "~/.pulpadm/sub/8a85f98152114bd6015212999fe76a87.pem"
+#   proxy_host: str     - Proxy server url to use
+#   proxy_port: int     - Port on the proxy server to make requests
+#
+
+# epel-rhel6-x86_64:
+#   display_name: "Extra Packages for Enterprise Linux 6 (x86_64)"
+#   feed: "http://mirrors.rit.edu/epel/6Server/x86_64"
+#   relative_url: "epel/6Server/x86_64"
+# pulp-28-rhel7-x86_64:
+#   display_name: "Pulp-v2.8 RHEL7 (x86_64)"
+#   feed: "https://repos.fedorapeople.org/repos/pulp/pulp/stable/2.8/7Server/x86_64"
+#   relative_url: "pulp/7Server/x86_64"
