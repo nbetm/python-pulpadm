@@ -4,8 +4,8 @@ the void of doing repetitive tasks around RPM repositories in the commonly known
 `pulp-admin` that comes with Pulp.
 
 Pulp is a platform for managing repositories of content, such as software
-packages, and pushing that content out to large numbers of consumers. For more
-information, check out the project: http://www.pulpproject.org/
+packages, and pushing that content out to a large number of consumers. For more
+information, check out the project [website][pulp-home].
 
 *Notice: this application does not implement (I'm not trying to reinvent the
 wheel here) a full admin interface for Pulp. If you are looking for a full admin

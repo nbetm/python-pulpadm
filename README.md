@@ -17,7 +17,7 @@ the void of doing repetitive tasks around RPM repositories in the commonly known
 `pulp-admin` that comes with Pulp.
 
 Pulp is a platform for managing repositories of content, such as software
-packages, and pushing that content out to large numbers of consumers. For more
+packages, and pushing that content out to a large number of consumers. For more
 information, check out the project [website][pulp-home].
 
 *Notice: this application does not implement (I'm not trying to reinvent the
@@ -35,7 +35,7 @@ python setup.py install
 
 ### Configuration
 
-By default, PulpAdm stage its configuration file under `~/.pulpadm/` directory.
+By default, PulpAdm stages its configuration file under `~/.pulpadm/` directory.
 Here is where you configure the *hostname* and *credentials* of the Pulp Server.
 A template of the configuration file can be found [here][config-tmpl].
 
@@ -58,8 +58,8 @@ API.
 
 ## TODO
 
- - Be able to delete and update repositories (not just create) Create a chain of
- - repositories in order to create a *Release Workflow*. For example:
+ - Be able to delete and update repositories (not just create)
+ - Create a chain of repositories with different tiers *(Release Workflow)*. ie:
   - upstream -> unstable -> stable
   - upstream -> lab -> dev -> prod
  - Promote content units using the *Release Workflow* mentioned above
