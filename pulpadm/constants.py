@@ -9,10 +9,8 @@ TMPL_DIR = pkg_resources.resource_filename(__name__, "templates")
 
 CONFIG_FILE = os.path.join(BASE_DIR, "config.yaml")
 
-LOG_LEVEL = ["critical", "error", "warning", "info", "debug"]
-
 MAX_SPEED = 10485760
 
 API_PATH = {
-    "repositories": "/pulp/api/v2/repositories/"
+    "repo": "pulp/api/v2/repositories/"
 }
