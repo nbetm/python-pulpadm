@@ -62,26 +62,37 @@ def repo_import(args):
     repo = pulpadm.repo.RPMRepo(hostname=args.hostname, port=args.port,
                                 username=args.username, password=args.password)
 
+    # Get list of existing repo(s)
+    repo_pulp = [item["id"] for item in repo.get()]
+
     # Read data from file
     data_yaml = utils.read_yaml(path=args.path)
-    data_to_print = []
+    repo_yaml = data_yaml.keys()
 
-    # Iterate thru list of repos
-    for repo_id, repo_attrs in data_yaml.iteritems():
-        # Bypass repo_id when filtering
-        if args.repo_id and repo_id not in args.repo_id:
-            continue
+    # Generate set of repo(s):
+    #   Create => set of repos on yaml file - set of existing repos
+    #   Delete => set of existing repos - set of repos on yaml file
+    #   Update => union of existing repos and repos on yaml file
+    repo_list = {
+        "create": list(set(repo_yaml) - set(repo_pulp)),
+        "delete": list(set(repo_pulp) - set(repo_yaml)),
+        "update": list(set.union(set(repo_pulp), set(repo_yaml)))
+    }
+    print()
+    print("Total of Repositories:")
+    for k, v in repo_list.iteritems():
+        print("{0:>8}: {1}".format(k.title(), len(v)))
+    print()
 
-        # Generate repo create object for end-point API
-        data = repo.generate_repo_create(repo_id=repo_id, **repo_attrs)
-        if args.generate:
-            data_to_print.append(data)
-        else:
-            repo.create(repo_config=data)
+    # Delete repo(s)
+    if args.delete:
+        for repo_id in repo_list["delete"]:
+            repo.delete(repo_id=repo_id)
 
-    # Print object as JSON or send request to API (create)
-    if args.generate:
-        print(json.dumps(data_to_print, indent=4, separators=(",", ": ")))
+    # Create repo(s)
+    for repo_id in repo_list["create"]:
+        data = repo.generate_repo_create(repo_id=repo_id, **data_yaml[repo_id])
+        repo.create(repo_config=data)
 
 
 def repo_list(args):
@@ -262,23 +273,20 @@ def main():
     #  Repo action parser: import
     repo_import_parser = repo_subparsers.add_parser(
         "import",
-        help="""same as create, but from input file""",
-        description="""Same as create, but from input file instead. Very useful
-        when creating a set of repositories. See `~/.pulpadm/repos.yaml' for an
-        example of the input file."""
+        help="""same as create/delete, but from input file""",
+        description="""Same as create/delete, but from input file instead.
+        Very useful when creating a set of repositories, or maintain Pulp server
+        content consistent. See `~/.pulpadm/repos.yaml' for an example of the
+        input file."""
     )
     repo_import_parser.add_argument(
         "path", type=str,
         help="""specifies the full path of the input file"""
     )
     repo_import_parser.add_argument(
-        "--repo-id", nargs="+", type=str, dest="repo_id", metavar="",
-        help="""if specified, the given repository is created (multiple entries
-        must be separated by space)"""
-    )
-    repo_import_parser.add_argument(
-        "--generate", action="store_true",
-        help="""returns the create repository API object instead of create"""
+        "--delete", action="store_true",
+        help="""deletes RPM repositories from Pulp server that are not in the
+        input file"""
     )
     repo_import_parser.set_defaults(func=repo_import)
 
